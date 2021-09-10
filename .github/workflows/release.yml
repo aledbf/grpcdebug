@@ -11,10 +11,7 @@ jobs:
     strategy:
       matrix:
         goos: [linux, darwin, windows]
-        goarch: [386, amd64]
-        exclude:
-          - goos: darwin
-            goarch: 386
+        goarch: [amd64]
 
     steps:
       - name: Checkout code
@@ -33,7 +30,7 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          go build -trimpath -o $GITHUB_WORKSPACE/build
+          go build -trimpath -ldflags='-buildid= -w -s' -o $GITHUB_WORKSPACE/build
       - name: Create package
         id: package
         run: |
